@@ -1,4 +1,4 @@
 package com.idt.java_backend.model;
 
-public class TextRequest {
+public record TextRequest(String text) { //this converts the json to object for our program
 }
