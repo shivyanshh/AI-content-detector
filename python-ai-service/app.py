@@ -1,22 +1,30 @@
-from pydantic import BaseModel #basemodel which defines the structure of data coming into your api
-from fastapi import FastAPI #for creating web server api
+from fastapi import FastAPI, UploadFile, File, HTTPException
+from pydantic import BaseModel
 
-from detector import detect_text  #importing detect_text from detector.py
+from io import BytesIO
+from PIL import UnidentifiedImageError
+
+from detector import detect_text
+from image_detector import detect_image as detect_ai_image
 
 
-app = FastAPI()   #object of fastapi basically app=backend
+app = FastAPI()
 
 
-class TextRequest(BaseModel):   #json:{  
-    text: str                   #        "text"(variable) : "some line in string type"
-                                #}
+class TextRequest(BaseModel):
+    text: str
 
-@app.get("/") #decorator @ lets you add extra behaviour to the function 
-def home():   
+
+@app.get("/")
+def home():
     return {
         "message": "AI Content Detector API is running"
     }
-#python -m uvicorn app:app --reload
+
+
+# -------------------------
+# TEXT DETECTION
+# -------------------------
 
 @app.post("/detect")
 def detect(request: TextRequest):
@@ -24,3 +32,28 @@ def detect(request: TextRequest):
     result = detect_text(request.text)
 
     return result
+
+
+# -------------------------
+# IMAGE DETECTION
+# -------------------------
+
+@app.post("/detect-image")
+async def detect_image(file: UploadFile = File(...)):
+
+    try:
+
+        contents = await file.read()
+
+        image_file = BytesIO(contents)
+
+        result = detect_ai_image(image_file)
+
+        return result
+
+    except UnidentifiedImageError:
+
+        raise HTTPException(
+            status_code=400,
+            detail="Uploaded file is not a valid image."
+        )

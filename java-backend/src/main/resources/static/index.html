@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AI Content Detector</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+
+    <div class="logo">
+        <span class="logo-icon">AI</span>
+        <span>Content Detector</span>
+    </div>
+
+    <div class="status">
+        <span class="status-dot"></span>
+        AI System Online
+    </div>
+
+</header>
+
+
+<main>
+
+    <section class="hero">
+
+        <div class="badge">
+            AI Safety & Content Verification
+        </div>
+
+        <h1>
+            Detect AI-generated
+            <span>content instantly.</span>
+        </h1>
+
+        <p class="subtitle">
+            Analyze text or images using AI detection models
+            and receive a prediction with a confidence score.
+        </p>
+
+    </section>
+
+
+    <!-- MODE SWITCH -->
+
+    <div class="mode-switch">
+
+        <button
+                id="textModeButton"
+                class="mode-button active"
+        >
+            Text Detection
+        </button>
+
+        <button
+                id="imageModeButton"
+                class="mode-button"
+        >
+            Image Detection
+        </button>
+
+    </div>
+
+
+    <section class="detector-card">
+
+
+        <!-- ========================= -->
+        <!-- TEXT MODE -->
+        <!-- ========================= -->
+
+        <div id="textMode">
+
+            <div class="card-header">
+
+                <div>
+                    <h2>Analyze Text</h2>
+                    <p>Paste the content you want to verify.</p>
+                </div>
+
+                <div
+                        id="wordCount"
+                        class="word-count"
+                >
+                    0 words
+                </div>
+
+            </div>
+
+
+            <textarea
+                    id="textInput"
+                    placeholder="Paste your text here..."
+            ></textarea>
+
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- IMAGE MODE -->
+        <!-- ========================= -->
+
+        <div
+                id="imageMode"
+                class="hidden"
+        >
+
+            <div class="card-header">
+
+                <div>
+                    <h2>Analyze Image</h2>
+                    <p>
+                        Upload an image to check whether it
+                        is likely AI-generated.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div
+                    id="uploadArea"
+                    class="upload-area"
+            >
+
+                <input
+                        type="file"
+                        id="imageInput"
+                        accept="image/png,image/jpeg,image/webp"
+                        hidden
+                >
+
+
+                <div
+                        id="uploadPlaceholder"
+                        class="upload-placeholder"
+                >
+
+                    <div class="upload-icon">
+                        ↑
+                    </div>
+
+                    <h3>Upload an image</h3>
+
+                    <p>
+                        Drag & drop an image here or click to browse
+                    </p>
+
+                    <span>
+                        JPG • PNG • WEBP
+                    </span>
+
+                </div>
+
+
+                <div
+                        id="imagePreviewContainer"
+                        class="image-preview-container hidden"
+                >
+
+                    <img
+                            id="imagePreview"
+                            alt="Uploaded image preview"
+                    >
+
+                    <div class="image-info">
+
+                        <span id="imageFileName">
+                        </span>
+
+                        <button
+                                id="removeImageButton"
+                                class="remove-image-button"
+                                type="button"
+                        >
+                            Remove
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ACTIONS -->
+
+        <div class="actions">
+
+            <button
+                    id="clearButton"
+                    class="secondary-button"
+            >
+                Clear
+            </button>
+
+            <button
+                    id="detectButton"
+                    class="primary-button"
+            >
+
+                <span id="buttonText">
+                    Analyze Content
+                </span>
+
+                <span
+                        id="loader"
+                        class="loader hidden"
+                ></span>
+
+            </button>
+
+        </div>
+
+
+        <!-- RESULT -->
+
+        <div
+                id="resultCard"
+                class="result-card hidden"
+        >
+
+            <div class="result-top">
+
+                <div>
+
+                    <p class="result-label">
+                        Detection Result
+                    </p>
+
+                    <h3 id="prediction">
+                        -
+                    </h3>
+
+                </div>
+
+
+                <div class="confidence-circle">
+
+                    <span id="confidence">
+                        0%
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="confidence-section">
+
+                <div class="confidence-info">
+
+                    <span>Model Confidence</span>
+
+                    <span id="confidenceText">
+                        0%
+                    </span>
+
+                </div>
+
+
+                <div class="progress-bar">
+
+                    <div
+                            id="progressFill"
+                            class="progress-fill"
+                    ></div>
+
+                </div>
+
+            </div>
+
+
+            <p
+                    id="resultDescription"
+                    class="result-description"
+            >
+            </p>
+
+
+            <p class="disclaimer">
+                Detection results are model estimates and may
+                occasionally produce incorrect classifications.
+            </p>
+
+        </div>
+
+
+        <!-- ERROR -->
+
+        <div
+                id="errorMessage"
+                class="error-message hidden"
+        >
+        </div>
+
+
+    </section>
+
+
+    <section class="features">
+
+        <div class="feature-card">
+
+            <div class="feature-number">
+                01
+            </div>
+
+            <h3>Text Detection</h3>
+
+            <p>
+                Analyze written content using a transformer-based
+                AI text detection model.
+            </p>
+
+        </div>
+
+
+        <div class="feature-card">
+
+            <div class="feature-number">
+                02
+            </div>
+
+            <h3>Image Detection</h3>
+
+            <p>
+                Upload images and estimate whether they are
+                AI-generated or real.
+            </p>
+
+        </div>
+
+
+        <div class="feature-card">
+
+            <div class="feature-number">
+                03
+            </div>
+
+            <h3>Confidence Score</h3>
+
+            <p>
+                Receive a model confidence score along with
+                every prediction.
+            </p>
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+<footer>
+
+    <p>
+        AI Content Detector • IDT Project • Team 10
+    </p>
+
+</footer>
+
+
+<script src="script.js"></script>
+
+</body>
+</html>
